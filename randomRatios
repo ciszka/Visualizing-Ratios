@@ -1,0 +1,68 @@
+#This function was developed to explore visualization for bias watch archaeo data
+#but may be used for any data that invovles visualizing ratios
+#It creates ratios of "male" to "female" speakers by randomizing the number of
+#Each type of speaker for each "session"
+#there can be a maximum of 20 speakers within one session
+
+randomRatios = function(NumberOfSessions){ #tells it how many "session" to create pairs for
+
+#Generates the base data for the ratios
+  female = sample(0:10, 10, size =NumberOfSessions) #Generates the amount of female speakers per session
+  male = sample(0:10, 10, size = NumberOfSessions) #Generates the amount of male speakers per session
+
+#Plots the "sessions" as points visualizing the ones with more males as red and those with more women as green
+#This is just a simple scatter plot and maybe be useful for instances where there are few sessions and
+#the ratio comparison is pretty different for each of them, This is good for generally visualizing the
+#ratios, plotting one variable against the other, however, it can saturate quickly so large datasets
+#Will not find this technique useful
+  plot(female, male, col = ifelse(female < male,'red','green'))
+
+#The next section adds lines to account for different ratio extremes
+  abline(a = 0, b =1, col = "blue") #Gender parity (sort of what we hope for) this is a general guideline, could be any hoped for ratio
+  
+     #The below not used portion would add line for each match up of ratios
+     #May be useful for visualization but for now it's probably more difficult to interpret
+     #too many lines generally
+     #for (i in 1:NumberOfSessions) {
+     #  if (male[i] == 0 || female[i] == 0){
+     #    
+     #  } else {
+     #  abline(a = 0, b = male[i]/female[i])
+     #  }
+     #}
+    
+  #This line is the NSF ratio for the number of men: women, adds the line for what the
+  #the population ideal is, above is too many men in relation to the NSF baseline ratio
+  #This line was specific for the NSF ratio, any ratio line that is the chosen appropriate
+  #ratio that we are looking for can be included here
+  #Essentially above the line = more of the Y value (in this case males per session)
+  #below th eline = more of hte x value (in this case women per session)
+  abline(a =0, b = .53)
+
+  
+  #This line is the WORST possible outcome, aka ALL DUDES IN A SESSION
+  #The number of points on this line indicates how many sessions are really
+  #Doing a bad job incorporating women into their discussions
+  #Or whatever your Y value is 
+  abline(v = 0, col = "red")
+  
+  #This line is sort of the "best" possible outcome, aka ALL LADIES IN A SESSION
+  #The number of points on this line indicates how many session are really
+  #Doing a good job of incorporating women into their discussions
+  #Or whatever you X value is 
+  abline(h = 0, col = "green")
+  
+  #The log of the ratio is an alternative and interesting way to visualize this data as well
+  #the log of the ratio essentially makes it so that 1/10 and 10/1 mirror one another
+  #The only problem with this is that 0/10 (which would be an all male panel and 10/0 an
+  #All female panel have funny values, also the interpretation of the actual log value
+  #Is not super intuitive but I think it gives a more genuine depiction of the spread
+  #Than the straight histogram and gives a better sense of frequnecy than the 
+  #X-Y plot on it's own
+  #The histogram looking at the log of the ratios is a better way to visualize the data
+  #It captures the number of sessionw ith a particular ratio and while the axis might
+  #not mean anything for people, the visual image is more understandable
+  #The only problems, as listed above are the x/0 and 0/x cases
+  hist(log(female/male), breaks =10)
+  print(log(male/female))
+}
